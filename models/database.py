@@ -29,8 +29,8 @@ class DatabaseManager:
     def get_all_records(self):
         query = """
             SELECT *
-            FROM students
-            JOIN grades ON students.roll_no = grades.roll_no
+            FROM students,grades
+            WHERE students.roll_no = grades.roll_no
         """
         self.cursor.execute(query)
         return self.cursor.fetchall()
@@ -38,8 +38,8 @@ class DatabaseManager:
     def get_desc_marks(self):
         query = """
             SELECT students.name, grades.marks_obtained
-            FROM students
-            JOIN grades ON students.roll_no = grades.roll_no
+            FROM students,grades
+            WHERE students.roll_no = grades.roll_no
             ORDER BY marks_obtained DESC
         """
         self.cursor.execute(query)
@@ -48,8 +48,8 @@ class DatabaseManager:
     def get_top_n(self, n=3):
         query = """
             SELECT students.name, grades.marks_obtained
-            FROM students
-            JOIN grades ON students.roll_no = grades.roll_no
+            FROM students,grades
+            WHERE students.roll_no = grades.roll_no
             ORDER BY marks_obtained DESC
             LIMIT %s
         """
@@ -65,8 +65,8 @@ class DatabaseManager:
     def get_failing_students(self, fail_mark=40):
         query = """
             SELECT students.name, grades.marks_obtained
-            FROM students
-            JOIN grades ON students.roll_no = grades.roll_no
+            FROM students,grades
+            where students.roll_no = grades.roll_no
             WHERE marks_obtained < %s
         """
         self.cursor.execute(query, (fail_mark,))
@@ -105,9 +105,8 @@ class DatabaseManager:
     def get_marks_by_name(self, name):
         query = """
             SELECT students.name, grades.marks_obtained
-            FROM students
-            JOIN grades ON students.roll_no = grades.roll_no
-            WHERE students.name = %s
+            FROM students,grades
+            WHERE students.roll_no = grades.roll_no and students.name = %s
         """
         self.cursor.execute(query, (name,))
         return self.cursor.fetchone()  # Returns a single record or None
