@@ -1,0 +1,265 @@
+/* =========================
+    THEME & RESET
+   ========================= */
+:root{
+  --bg: #0e0f12;
+  --panel: #14161a;
+  --panel-2:#101216;
+  --border: #242830;
+  --text: #e6e9ef;
+  --muted:#a3adbb;
+  --accent:#00c9d9;
+  --accent-2:#0eb3c2;
+  --shadow: 0 8px 30px rgba(0,0,0,.35);
+  --radius: 16px;
+  --header-h: 64px;
+}
+
+*{ box-sizing: border-box; margin:0; padding:0; }
+
+html, body{
+  height:100%;
+}
+
+body.app{
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================
+    HEADER (hidden first)
+   ========================= */
+.site-header{
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--header-h);
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(0deg, rgba(18,19,23,0.65), rgba(18,19,23,0.65));
+  backdrop-filter: blur(6px);
+  z-index: 20;
+  opacity: 0;
+  transform: translateY(-12px);
+  transition: opacity .35s ease, transform .35s ease, height .3s ease, padding .3s ease, border .3s ease;
+}
+.brand{
+  display:flex; align-items:center; gap:10px; font-weight:600;
+}
+.brand-mark{ font-size: 20px; }
+.brand-name{ letter-spacing:.2px; }
+.brand-name span{ color: var(--accent); }
+
+/* Hidden header before chat starts */
+.app:not(.started) .site-header{
+  height: 0;
+  padding: 0 20px;
+  border: 0;
+  pointer-events: none;
+}
+
+/* Visible header after first message */
+.app.started .site-header{
+  opacity: 1;
+  transform: none;
+}
+
+/* =========================
+    CHAT SHELL
+   ========================= */
+.chat-shell{
+  max-width: 1000px;
+  width: 92%;
+  margin: 10px auto 24px;
+  min-height: calc(100vh - 10px - 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* =========================
+    HERO (first view)
+   ========================= */
+#hero{
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+  text-align:center;
+  background: transparent;
+  min-height: clamp(320px, 52vh, 520px);
+  transition: opacity .4s ease, transform .45s ease, min-height .45s ease, margin .45s ease, padding .45s ease;
+  padding-top: 10vh;
+}
+.hero-mark{ font-size: 56px; line-height:1; }
+.hero-title{
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.hero-title span{ color: var(--accent); }
+.hero-sub{ color: var(--muted); margin-top: 2px; }
+
+/* Collapse the HERO once started */
+.app.started #hero{
+  opacity: 0;
+  transform: translateY(-8px) scale(.98);
+  min-height: 0px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* =========================
+    CHAT WINDOW
+   ========================= */
+#chat-window{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  max-height: 60vh; /* Limit max height, scroll if exceeded */
+}
+#chat-window::-webkit-scrollbar{ width: 8px; }
+#chat-window::-webkit-scrollbar-thumb{ background: #2d323b; border-radius: 8px; }
+
+/* Message bubbles */
+.message{
+  max-width: 75%;
+  padding: 12px 16px;
+  border-radius: 14px;
+  line-height: 1.5;
+  font-size: 15px;
+  word-wrap: break-word;
+  animation: msgIn .25s ease;
+  background: #181b20;
+  border: 1px solid #1f232a;
+  color: var(--text);
+}
+@keyframes msgIn{ from{opacity:0; transform: translateY(4px);} to{opacity:1; transform:none;} }
+
+.message.user{
+  align-self: flex-end;
+  color: #071014;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-bottom-right-radius: 6px;
+}
+.message.bot{
+  align-self: flex-start;
+  border-bottom-left-radius: 6px;
+}
+
+/* Table styling inside messages */
+.message.bot table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  background-color: var(--panel-2);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.message.bot table th,
+.message.bot table td {
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  color: white !important;   /* force white text */
+  white-space: pre-line;
+  word-wrap: break-word;
+  font-size: 14px;
+  background-color: var(--panel-2);
+}
+
+.message.bot table th {
+  border-bottom: 2px solid var(--accent-2);
+  font-weight: bold;         /* keeps headers distinct */
+}
+
+/* =========================
+    INPUT AREA
+   ========================== */
+#chat-input-area{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  background: #121418;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: var(--shadow);
+}
+
+/* Updated input styling for form inputs inside chat messages */
+.message.bot form input {
+  background-color: #000000; /* Black background */
+  color: var(--text);
+  border: 2px solid var(--accent); /* Cyan outline */
+  border-radius: 5px;
+  padding: 6px 8px;
+  width: calc(100% - 110px);
+  margin-bottom: 8px;
+  margin-right: 5px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.message.bot form input:focus {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 8px var(--accent-2);
+  background-color: #000000;
+}
+
+#user-input{
+  flex:1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-size: 15px;
+  padding: 10px 12px;
+}
+#user-input::placeholder{ color: #6d7686; }
+
+#send-btn{
+  background: var(--accent);
+  color: #061015;
+  border: none;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .12s ease, filter .2s ease, background .2s ease;
+}
+#send-btn:hover{ filter: brightness(1.05); transform: translateY(-1px); }
+#send-btn:active{ transform: translateY(0); }
+
+/* =========================
+    RESPONSIVE
+   ========================== */
+@media (max-width: 768px){
+  .chat-shell{ width: 95%; gap: 12px; }
+  #chat-window{ padding: 12px; max-height: 55vh; }
+  .message{ font-size: 14px; }
+  .message.bot table th,
+  .message.bot table td {
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+}

@@ -1,0 +1,26 @@
+# ===========================
+# Backend Python Packages
+# ===========================
+
+# Flask==2.3.2
+# Lightweight web framework used to build your REST API to handle chat requests and serve frontend pages.
+
+Flask==2.3.2
+
+# mysql-connector-python==8.0.34
+# Official MySQL driver allowing Python code to connect to MySQL database and execute queries.
+
+mysql-connector-python==8.0.34
+
+# scikit-learn==1.3.0
+# Machine learning library used to train and run the intent classifier model.
+
+scikit-learn==1.3.0
+
+# nltk==3.8.1
+# Natural Language Toolkit; used for text processing and could be utilized for tokenization or other NLP tasks.
+
+nltk==3.8.1
+
+# (pickle is part of Python standard library - no install needed)
+# (os is part of Python standard library - no install needed)

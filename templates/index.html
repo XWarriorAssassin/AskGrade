@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AskGrade</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="app">
+  <!-- Header (hidden until first message) -->
+  <header class="site-header">
+    <div class="brand">
+      
+      <span class="brand-name">Ask<span>Grade</span></span>
+    </div>
+  </header>
+
+  <!-- Main Chat Shell -->
+  <main class="chat-shell">
+    <!-- HERO (visible until first message) -->
+    <section id="hero">
+      
+      <h1 class="hero-title">Ask<span>Grade</span></h1>
+      <p class="hero-sub">Simplifying student database management.</p>
+    </section>
+
+    <!-- CHAT WINDOW -->
+    <section id="chat-window" aria-live="polite" aria-label="Conversation">
+      <div id="chat-messages"></div>
+    </section>
+
+    <!-- INPUT AREA -->
+    <div id="chat-input-area">
+      <input
+        type="text"
+        id="user-input"
+        placeholder="Type your question here..."
+        aria-label="Type your question here"
+        autocomplete="off"
+      />
+      <button id="send-btn" aria-label="Send message">Send</button>
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
