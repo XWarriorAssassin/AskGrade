@@ -3,9 +3,9 @@ import mysql.connector
 class DatabaseManager:
     def __init__(self):
         self.conn = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="A-123456789gk",
+            host="",
+            user="",
+            password="",
             database='askgrade'
         )
         self.cursor = self.conn.cursor(dictionary=True)
