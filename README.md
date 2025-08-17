@@ -11,7 +11,7 @@ It helps teachers manage marks, generate insights, and query the database using 
 -  **AI-powered Queries** – Natural language intent classifier to interpret teacher queries  
 -  **Insights & Statistics** – Max, min, average, and other statistics on student performance    
 -  **Frontend + Backend** – Clean frontend with Flask-based backend
--  **For more details** - Try asking the AskGrade itself!
+-  **For more details** - Try asking AskGrade itself!
 
 ---
 
