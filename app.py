@@ -312,11 +312,7 @@ def submit_form():
             except (ValueError, TypeError):
                 return jsonify({'response': 'Marks must be a valid number.'}), 400
             
-            # Edge case: Validate other string fields
-            for field_name, field_value in [('class', student_class), ('section', section), ('house', house)]:
-                if field_value is not None and (not isinstance(field_value, str) or field_value.strip() == ''):
-                    return jsonify({'response': f'{field_name.capitalize()} must be a non-empty string if provided.'}), 400
-            
+           
             try:
                 db_manager.add_student(student_id, name, marks, house, email, student_class, section)
                 response = "Added student record successfully."
