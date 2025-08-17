@@ -377,5 +377,27 @@
     "Hi teacher",
     "Hey class",
     "Hello everyone"
-  ]
+  ],
+  "introduce":
+  [ "What can you do?",
+    "Give an introduction of yourself",
+    "Who are you?",
+    "Introduce yourself",
+    "What are your capabilities?",
+    "Tell me about yourself",
+    "What is your purpose?",
+    "What functions do you have?",
+    "How can you help me?",
+    "What are you capable of?",
+    "What services do you provide?",
+    "Can you introduce yourself?",
+    "What's your role?",
+    "What are your features?",
+    "Tell me what you can do",
+    "What tasks can you perform?",
+    "How do you work?",
+    "What are you designed for?",
+    "What's your function?",
+    "Can you tell me about your abilities?",
+    "What kind of assistance do you offer?"]
 }
