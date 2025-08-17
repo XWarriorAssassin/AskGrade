@@ -24,6 +24,8 @@ def api_query():
     require_form = False
     required_fields = []
     print("Confidence:",int(confidence*100),"%")
+    
+    
     if intent == 'add_student':
         response = "Please enter the student's details below."
         require_form = True
@@ -33,6 +35,8 @@ def api_query():
         response = "Please enter the student name and new marks below."
         require_form = True
         required_fields = ['name', 'marks']
+    elif intent=="Unknown":
+        response="Command not recognized."
 
     elif intent == 'display_all':
         data = db_manager.get_all_records()
@@ -59,7 +63,12 @@ def api_query():
             })
         else:
             response = "No records to display."
-    
+    elif intent=="introduce":
+        response="""Hello! I’m AskGrade, your intelligent assistant for managing student records quickly and easily. I can help you by:\n
+          Adding new student details, update or delete records, fetch marks for any student, and provide class statistics like averages and top 3 rankings.\n
+          Just ask me to show all students, get top performers, or any data you need in the way you want.\n 
+          I’m here to simplify your student database management and make your work smoother.\n
+          How can I assist you today?"""    
     elif intent=="compliment":
         
         responses = [
@@ -214,66 +223,180 @@ def api_query():
         'required_fields': required_fields,
         'intent': intent
     })
+@app.route('/api/student_names', methods=['GET'])
+def get_student_names():
+    data = db_manager.get_all_student_names()  # You’ll add this DB method
+    names = [d['name'] for d in data]
+    return jsonify({"names": names})
 
 # New route for handling form submissions
 @app.route('/api/submit_form', methods=['POST'])
 def submit_form():
-    intent = request.json.get('intent')
-    data = request.json.get('form')
-    response = "Form submission not recognized."
-
-    if intent == 'add_student':
-        student_id = data.get('roll number')
-        name = data.get('name') or None
-        marks = data.get('marks')
-        email = data.get('email') or None
-        student_class = data.get('class') or None
-        section = data.get('section') or None
-        house= data.get('house') or None
-
-        # Convert marks to int if provided and valid, else None
-        try:
-            marks = int(marks) if marks not in [None, ''] else None
-        except ValueError:
-            marks = None
-
-        db_manager.add_student(student_id,name, marks,house, email, student_class, section)
-        response = "Added student record."
-
-    elif intent == 'modify_marks':
-        name = data.get('name') or None
-        marks = data.get('marks')
-        try:
-            marks = int(marks) if marks not in [None, ''] else None
-        except ValueError:
-            marks = None
-
-        if name and marks is not None:
-            success = db_manager.modify_marks_by_name(name, marks)
-            response = f"Updated {name}'s marks to {marks}." if success else f"Student {name} not found."
-        else:
-            response = "Please provide both student name and marks to modify."
-
-    elif intent == 'delete_student':
-        name = data.get('name') or None
-        if name:
-            success = db_manager.delete_student_by_name(name)
-            response = f"Deleted {name}'s record." if success else f"Student {name} not found."
-        else:
-            response = "Please provide the student's name to delete."
-
-    elif intent == 'get_marks':
-        name = data.get('name') or None
-        if name:
-            record = db_manager.get_marks_by_name(name)
-            if record:
-                response = f"{record['name']} has scored {record['marks_obtained']} marks."
-            else:
-                response = f"No records found for student named {name}."
-        else:
-            response = "Please provide the student's name."
-
+    try:
+        # Edge case: Check if request has JSON data
+        if not request.is_json:
+            return jsonify({'response': 'Invalid request format. Expected JSON data.'}), 400
+        
+        # Edge case: Check if request.json exists
+        if request.json is None:
+            return jsonify({'response': 'No JSON data provided in request.'}), 400
+        
+        intent = request.json.get('intent')
+        data = request.json.get('form')
+        
+        # Edge case: Missing intent
+        if not intent:
+            return jsonify({'response': 'Intent is required but not provided.'}), 400
+        
+        # Edge case: Invalid intent
+        valid_intents = ['add_student', 'modify_marks', 'delete_student', 'get_marks']
+        if intent not in valid_intents:
+            return jsonify({'response': f'Invalid intent. Valid options are: {", ".join(valid_intents)}'}), 400
+        
+        # Edge case: Missing form data
+        if data is None:
+            return jsonify({'response': 'Form data is required but not provided.'}), 400
+        
+        # Edge case: Empty form data
+        if not isinstance(data, dict):
+            return jsonify({'response': 'Form data must be a valid object.'}), 400
+        
+        response = "Form submission not recognized."
+        
+        if intent == 'add_student':
+            student_id = data.get('roll number')
+            name = data.get('name')
+            marks = data.get('marks')
+            email = data.get('email')
+            student_class = data.get('class')
+            section = data.get('section')
+            house = data.get('house')
+            
+            # Edge case: Missing required fields
+            if not student_id:
+                return jsonify({'response': 'Roll number is required for adding a student.'}), 400
+            
+            # Edge case: Convert and validate roll number as integer
+            try:
+                if isinstance(student_id, str):
+                    student_id = student_id.strip()
+                student_id = int(student_id)
+                if student_id <= 0:
+                    return jsonify({'response': 'Roll number must be a positive integer.'}), 400
+            except (ValueError, TypeError):
+                return jsonify({'response': 'Roll number must be a valid integer.'}), 400
+            
+            # Edge case: Validate name if provided
+            if name is not None and (not isinstance(name, str) or name.strip() == ''):
+                return jsonify({'response': 'Name must be a non-empty string if provided.'}), 400
+            
+            # Edge case: Validate email format if provided
+            if email is not None and email.strip():
+                import re
+                email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+                if not re.match(email_pattern, email.strip()):
+                    return jsonify({'response': 'Invalid email format.'}), 400
+            
+            # Convert marks to int if provided and valid, else None
+            try:
+                if marks not in [None, '']:
+                    marks_int = int(marks)
+                    # Edge case: Negative marks or unrealistic values
+                    if marks_int < 0:
+                        return jsonify({'response': 'Marks cannot be negative.'}), 400
+                    if marks_int > 500:  # Assuming max marks is 1000
+                        return jsonify({'response': 'Marks seem unrealistically high (>500).'}), 400
+                    marks = marks_int
+                else:
+                    marks = None
+            except (ValueError, TypeError):
+                return jsonify({'response': 'Marks must be a valid number.'}), 400
+            
+           
+            try:
+                db_manager.add_student(student_id, name, marks, house, email, student_class, section)
+                response = "Added student record successfully."
+            except Exception as e:
+                # Edge case: Database errors (duplicate student, connection issues, etc.)
+                return jsonify({'response': f'Database error: Unable to add student. {str(e)}'}), 500
+        
+        elif intent == 'modify_marks':
+            name = data.get('name')
+            marks = data.get('marks')
+            
+            # Edge case: Missing required fields
+            if not name:
+                return jsonify({'response': 'Student name is required for modifying marks.'}), 400
+            if marks in [None, '']:
+                return jsonify({'response': 'Marks value is required for modification.'}), 400
+            
+            # Edge case: Invalid name
+            if not isinstance(name, str) or name.strip() == '':
+                return jsonify({'response': 'Student name must be a non-empty string.'}), 400
+            
+            # Edge case: Validate marks
+            try:
+                marks_int = int(marks)
+                if marks_int < 0:
+                    return jsonify({'response': 'Marks cannot be negative.'}), 400
+                if marks_int > 1000:
+                    return jsonify({'response': 'Marks seem unrealistically high (>1000).'}), 400
+                marks = marks_int
+            except (ValueError, TypeError):
+                return jsonify({'response': 'Marks must be a valid number.'}), 400
+            
+            try:
+                success = db_manager.modify_marks_by_name(name.strip(), marks)
+                response = f"Updated {name.strip()}'s marks to {marks}." if success else f"Student '{name.strip()}' not found."
+            except Exception as e:
+                return jsonify({'response': f'Database error: Unable to modify marks. {str(e)}'}), 500
+        
+        elif intent == 'delete_student':
+            name = data.get('name')
+            
+            # Edge case: Missing name
+            if not name:
+                return jsonify({'response': 'Student name is required for deletion.'}), 400
+            
+            # Edge case: Invalid name
+            if not isinstance(name, str) or name.strip() == '':
+                return jsonify({'response': 'Student name must be a non-empty string.'}), 400
+            
+            try:
+                success = db_manager.delete_student_by_name(name.strip())
+                response = f"Deleted {name.strip()}'s record." if success else f"Student '{name.strip()}' not found."
+            except Exception as e:
+                return jsonify({'response': f'Database error: Unable to delete student. {str(e)}'}), 500
+        
+        elif intent == 'get_marks':
+            name = data.get('name')
+            
+            # Edge case: Missing name
+            if not name:
+                return jsonify({'response': 'Student name is required to retrieve marks.'}), 400
+            
+            # Edge case: Invalid name
+            if not isinstance(name, str) or name.strip() == '':
+                return jsonify({'response': 'Student name must be a non-empty string.'}), 400
+            
+            try:
+                record = db_manager.get_marks_by_name(name.strip())
+                if record:
+                    # Edge case: Handle case where marks might be None in database
+                    marks_display = record.get('marks_obtained', 'No marks recorded')
+                    if marks_display is None:
+                        marks_display = 'No marks recorded'
+                    response = f"{record['name']} has scored {marks_display} marks."
+                else:
+                    response = f"No records found for student named '{name.strip()}'."
+            except Exception as e:
+                return jsonify({'response': f'Database error: Unable to retrieve marks. {str(e)}'}), 500
+    
+    except Exception as e:
+        # Edge case: Unexpected server errors
+        return jsonify({'response': f'Server error: {str(e)}'}), 500
+    
     return jsonify({'response': response})
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5000,debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
