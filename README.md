@@ -14,7 +14,7 @@ It helps teachers manage marks, generate insights, and query the database using 
 
 ---
 
-## 🛠Tech Stack
+## Tech Stack
 
 - **Backend:** Flask (Python)  
 - **Database:** MySQL  
