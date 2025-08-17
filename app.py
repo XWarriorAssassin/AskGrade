@@ -24,8 +24,7 @@ def api_query():
     require_form = False
     required_fields = []
     print("Confidence:",int(confidence*100),"%")
-    if confidence<0.2:
-        intent="Unknown"
+    
     
     if intent == 'add_student':
         response = "Please enter the student's details below."
@@ -224,6 +223,11 @@ def api_query():
         'required_fields': required_fields,
         'intent': intent
     })
+@app.route('/api/student_names', methods=['GET'])
+def get_student_names():
+    data = db_manager.get_all_student_names()  # You’ll add this DB method
+    names = [d['name'] for d in data]
+    return jsonify({"names": names})
 
 # New route for handling form submissions
 @app.route('/api/submit_form', methods=['POST'])

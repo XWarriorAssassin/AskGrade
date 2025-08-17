@@ -9,6 +9,10 @@ class DatabaseManager:
             database='askgrade'
         )
         self.cursor = self.conn.cursor(dictionary=True)
+        
+    def get_all_student_names(self):
+        self.cursor.execute("SELECT name FROM students")
+        return self.cursor.fetchall()
 
     def add_student(self,student_id, name, marks,house, email=None, student_class=None, section=None):
         # Note: 'class' is a reserved word, use backticks!

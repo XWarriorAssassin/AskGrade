@@ -9,11 +9,11 @@ let started = false;
 let pendingFormIntent = null;
 let pendingFormFields = [];
 
-// Define dropdown options
+// Define dropdown options for static fields
 const dropdownOptions = {
   house: ['daya', 'karunya', 'sathya', 'vidya'],
-  class: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-  section: ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+  class: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+  section: ['A','B','C','D','E','F','G']
 };
 
 function createFormField(field, form) {
@@ -25,17 +25,17 @@ function createFormField(field, form) {
 
   let input;
 
-  // Check if field should be a dropdown
+  // Check if field should be a dropdown (static dropdowns)
   if (dropdownOptions[field]) {
     input = document.createElement('select');
     input.name = field;
-    
+
     // Add default option
     const defaultOption = document.createElement('option');
     defaultOption.value = '';
     defaultOption.textContent = `Select ${field}`;
     input.appendChild(defaultOption);
-    
+
     // Add options from dropdownOptions
     dropdownOptions[field].forEach(option => {
       const optionElement = document.createElement('option');
@@ -50,8 +50,8 @@ function createFormField(field, form) {
     input.name = field;
   }
 
-  // Common styling for both input types
-  input.required = false;  // All fields optional
+  // Common styling
+  input.required = false;  // all fields optional
   input.style.marginBottom = '8px';
   input.style.marginRight = '5px';
   input.style.padding = '6px 8px';
@@ -64,6 +64,41 @@ function createFormField(field, form) {
   form.appendChild(document.createElement('br'));
 }
 
+// Helper to add a dropdown with given options for dynamic name list
+function addDropdown(field, options, form) {
+  const label = document.createElement('label');
+  label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
+  label.style.marginRight = '10px';
+  label.style.display = 'inline-block';
+  label.style.width = '90px';
+
+  const select = document.createElement('select');
+  select.name = field;
+
+  const defaultOption = document.createElement('option');
+  defaultOption.value = '';
+  defaultOption.textContent = `Select ${field}`;
+  select.appendChild(defaultOption);
+
+  options.forEach(option => {
+    const opt = document.createElement('option');
+    opt.value = option;
+    opt.textContent = option;
+    select.appendChild(opt);
+  });
+
+  select.style.marginBottom = '8px';
+  select.style.marginRight = '5px';
+  select.style.padding = '6px 8px';
+  select.style.borderRadius = '5px';
+  select.style.border = '1.2px solid #bbb';
+  select.style.width = 'calc(100% - 110px)';
+
+  form.appendChild(label);
+  form.appendChild(select);
+  form.appendChild(document.createElement('br'));
+}
+
 function createForm(fields, intent) {
   const formDiv = document.createElement('div');
   formDiv.classList.add('message', 'bot');
@@ -72,11 +107,37 @@ function createForm(fields, intent) {
   const form = document.createElement('form');
   form.id = 'action-form';
 
-  // Create fields using the new function
-  fields.forEach(field => {
-    createFormField(field, form);
-  });
+  if (intent === 'modify_marks') {
+    // Fetch student names dynamically from backend
+    fetch('/api/student_names')
+      .then(res => res.json())
+      .then(data => {
+        const names = data.names;
+        addDropdown('name', names, form);
+        // Add other fields excluding 'name'
+        fields.filter(field => field !== 'name').forEach(field => {
+          createFormField(field, form);
+        });
 
+        appendFormAndHandle(formDiv, form, fields, intent);
+      })
+      .catch(() => {
+        // fallback: create all fields without dynamic dropdown
+        fields.forEach(field => {
+          createFormField(field, form);
+        });
+        appendFormAndHandle(formDiv, form, fields, intent);
+      });
+  } else {
+    // For other intents, create normal form fields
+    fields.forEach(field => {
+      createFormField(field, form);
+    });
+    appendFormAndHandle(formDiv, form, fields, intent);
+  }
+}
+
+function appendFormAndHandle(formDiv, form, fields, intent) {
   const submit = document.createElement('button');
   submit.textContent = 'Submit';
   submit.type = 'submit';
@@ -94,7 +155,11 @@ function createForm(fields, intent) {
     e.preventDefault();
     const formData = {};
     fields.forEach(field => {
-      formData[field] = form.elements[field].value;
+      if (form.elements[field]) {
+        formData[field] = form.elements[field].value;
+      } else {
+        formData[field] = null;
+      }
     });
     formDiv.remove();
 
