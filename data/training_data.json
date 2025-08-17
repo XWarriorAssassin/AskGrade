@@ -380,7 +380,6 @@
   ],
   "introduce":
   [ "What can you do?",
-    "Give an introduction of yourself",
     "Who are you?",
     "Introduce yourself",
     "What are your capabilities?",
@@ -399,5 +398,15 @@
     "What are you designed for?",
     "What's your function?",
     "Can you tell me about your abilities?",
-    "What kind of assistance do you offer?"]
+    "What kind of assistance do you offer?",
+    "Give me an overview of your features",
+    "What help can you provide?",
+    "Describe your functionality",
+    "What's your specialty?",
+    "Show me what you're good at",
+    "What commands do you understand?",
+    "Explain your purpose to me",
+    "What options do I have?",
+    "Tell me your capabilities",
+    "What can I ask you to do?"]
 }
