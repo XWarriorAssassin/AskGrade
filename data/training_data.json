@@ -30,16 +30,9 @@
     "Add another student",
     "Put one more student",
     "Can you put student?",
-    "Add new kid",
-    "Put student in list",
-    "Please put student",
-    "Can you add new kid?",
     "Add student now",
-    "I want to put student",
     "Add kid to class",
     "Please add one more",
-    "Can you add in class?",
-    "Put new name in list",
     "Add student to class"
   ],
   "display_all": [
@@ -79,11 +72,8 @@
     "See all names",
     "Show everyone",
     "Show kids in class",
-    "Can I see all?",
     "Show student list",
     "Give me all",
-    "Show all people",
-    "I want all names",
     "Show class list",
     "Show whole class"
   ],
@@ -107,7 +97,16 @@
     "Order the results by academic performance",
     "Show me students sorted by their results",
     "Display records in performance order",
-    "Can you rank all students by marks?"
+    "Can you rank all students by marks?",
+    "Sort students by descending marks",
+    "Arrange students by highest scores",
+    "Display class results from top to bottom",
+    "Who scored the highest to lowest?",
+    "Sort results from maximum to minimum",
+    "Give students ordered by grades",
+    "Rank the class by marks",
+    "Show descending order of scores",
+    "Arrange in order of performance"
   ],
   "show_top3": [
     "Show top 3 students",
@@ -129,7 +128,17 @@
     "Show the first three students by marks",
     "Give me the three highest grades",
     "Who are the class toppers?",
-    "Show me the top trio of students"
+    "Show me the top trio of students",
+    "Which students got the best 3 marks?",
+    "Show three toppers of the class",
+    "Display class top 3",
+    "List the best three performers",
+    "Give me the class toppers",
+    "Who scored highest three?",
+    "Tell me the three best marks",
+    "Show class leaders",
+    "Get top three ranked students",
+    "Show the top 3 results"
   ],
   "class_average": [
     "What is the class average?",
@@ -153,8 +162,15 @@
     "Show the class performance average",
     "What is the collective class average?",
     "display the avg of the students",
-    "show the class avg"
-    
+    "show the class avg",
+    "Show mean marks of students",
+    "What is the average grade here?",
+    "Tell me average student marks",
+    "Calculate total average score",
+    "Show me the mean marks",
+    "How much is the class averaging?",
+    "What is the average result?",
+    "Class mean please"
   ],
   "fail_records": [
     "Show students who failed",
@@ -194,9 +210,7 @@
     "Show all who failed",
     "Who did not clear?",
     "Show bad marks",
-    "Oh no, who failed?",
     "Show the failures",
-    "Can you tell me the fail names?",
     "Please show the failed students"
   ],
   "modify_marks": [
@@ -209,17 +223,27 @@
     "Please update student marks",
     "Set student marks",
     "Change student marks",
-    "Update student score",
     "Modify student grade",
-    "Change student marks",
-    "Update student score",
-    "Edit student marks",
-    "Change student grade",
-    "Update student marks",
-    "Modify student score",
-    "Change student marks",
     "Update student grade",
-    "Edit student marks"
+    "Adjust a student's marks",
+    "Edit the grade of a student",
+    "Change student score",
+    "Update the record of a student's marks",
+    "Revise student score",
+    "Please change the student grade",
+    "Can you edit a student mark?",
+    "Modify one student's score",
+    "Update a student's grade",
+    "Correct student marks",
+    "Revise the grade entry",
+    "Change one student's score",
+    "Update one student's marks",
+    "Edit the marks entry",
+    "Please revise the marks",
+    "Adjust the marks of a student",
+    "Change record of student marks",
+    "Update the score of a student",
+    "Modify the student performance record"
   ],
   "delete_student": [
     "Delete a student record",
@@ -250,12 +274,7 @@
     "Delete record",
     "Take student out",
     "Please remove student",
-    "Delete record",
-    "Remove record",
-    "Delete one student",
-    "Can you delete student?",
     "Remove entry",
-    "Take student out",
     "Delete from list",
     "Remove from data",
     "Please delete now",
@@ -263,7 +282,7 @@
     "Remove student record",
     "Please help me delete this student"
   ],
-    "get_marks": [
+  "get_marks": [
     "Show marks for a student",
     "Get student's marks",
     "Display a student's score",
@@ -283,10 +302,19 @@
     "What marks does a student have?",
     "Get a student's score",
     "Show me marks for a student",
-    "Display a student's marks"
+    "Display a student's marks",
+    "Fetch the score of a student",
+    "Get results of a student",
+    "Please show student score",
+    "What grade did the student get?",
+    "Retrieve marks of student",
+    "Can you fetch a student's grade?",
+    "I want the marks of a student",
+    "Show the test score of a student",
+    "Display the student grade",
+    "Tell me the score of a student"
   ],
-  "compliment":
-  [
+  "compliment": [
     "Thank you",
     "You are the best",
     "You are awesome",
@@ -308,10 +336,17 @@
     "You're fantastic",
     "Great performance",
     "You're brilliant",
-    "Superb job"
+    "Superb job",
+    "I appreciate it",
+    "Thanks a lot",
+    "Many thanks",
+    "You did great",
+    "Much appreciated",
+    "That was awesome",
+    "Really helpful",
+    "Fantastic work"
   ],
-  "greet":
-  [
+  "greet": [
     "Hello",
     "Hi",
     "Good morning",
@@ -331,6 +366,16 @@
     "Hiya",
     "What's up",
     "How are you",
-    "How's it going"
+    "How's it going",
+    "Yo",
+    "Hey buddy",
+    "Hello friend",
+    "Good to see ya",
+    "Hey, how are you?",
+    "Hi friend",
+    "Hey there pal",
+    "Hi teacher",
+    "Hey class",
+    "Hello everyone"
   ]
 }
