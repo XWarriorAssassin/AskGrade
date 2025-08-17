@@ -3,8 +3,8 @@ import dbprivate
 class DatabaseManager:
     def __init__(self):
         self.conn = mysql.connector.connect(
-            host='localhost',
-            user='root',
+            host=dbprivate.host,
+            user=dbprivate.user,
             password=dbprivate.password,
             database='askgrade'
         )
