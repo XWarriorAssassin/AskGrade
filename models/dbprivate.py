@@ -1,3 +1,3 @@
-password=" " #Enter your password
-host=" " #Enter your host
-user=" " #Enter your user
+password="A-123456789gk" #Enter your password
+host="localhost" #Enter your host
+user="root" #Enter your user

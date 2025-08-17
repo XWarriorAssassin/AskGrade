@@ -1,11 +1,11 @@
 import mysql.connector
-import dbprivate
+
 class DatabaseManager:
     def __init__(self):
         self.conn = mysql.connector.connect(
-            host=dbprivate.host,
-            user=dbprivate.user,
-            password=dbprivate.password,
+            host="localhost",
+            user="root",
+            password="A-123456789gk",
             database='askgrade'
         )
         self.cursor = self.conn.cursor(dictionary=True)
