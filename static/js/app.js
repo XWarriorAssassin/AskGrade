@@ -107,7 +107,7 @@ function createForm(fields, intent) {
   const form = document.createElement('form');
   form.id = 'action-form';
 
-  if (intent === 'modify_marks') {
+  if (intent === 'modify_marks' || intent === 'get_marks') {
     // Fetch student names dynamically from backend
     fetch('/api/student_names')
       .then(res => res.json())
