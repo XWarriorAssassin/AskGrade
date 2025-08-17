@@ -5,17 +5,16 @@ It helps teachers manage marks, generate insights, and query the database using 
 
 ---
 
-## ✨ Features
+##  Features
 
-- 📊 **Student Marks Management** – Add, update, and view student records easily  
-- 🤖 **AI-powered Queries** – Natural language intent classifier to interpret teacher queries  
-- 📈 **Insights & Statistics** – Max, min, average, and other statistics on student performance  
-- 📤 **Export to Excel** – Export student data for reports and sharing  
-- 🌐 **Frontend + Backend** – Clean frontend with Flask-based backend  
+-  **Student Marks Management** – Add, update, and view student records easily  
+-  **AI-powered Queries** – Natural language intent classifier to interpret teacher queries  
+-  **Insights & Statistics** – Max, min, average, and other statistics on student performance    
+-  **Frontend + Backend** – Clean frontend with Flask-based backend  
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠Tech Stack
 
 - **Backend:** Flask (Python)  
 - **Database:** MySQL  
@@ -24,7 +23,7 @@ It helps teachers manage marks, generate insights, and query the database using 
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Clone the Repository
 
@@ -33,39 +32,34 @@ git clone https://github.com/XWarriorAssassin/AskGrade.git
 cd AskGrade
 ```
 
-### 2. Set Up Virtual Environment (recommended)
-
-```bash
-python -m venv venv
-venv\Scripts\activate  # On Windows
-# or
-source venv/bin/activate  # On macOS/Linux
-```
-
-### 3. Install Requirements
+### 2. Install Requirements
 
 ```bash
 pip install -r requirements.txt
 ```
+In Python:
+```bash
+import nltk
+nltk.download('stopwords')
+nltk.download('punkt')
+```
 
-### 4. Configure Database
+### 3. Configure Database
 
-- Create a MySQL database (e.g., `askgrade_db`)
+- Create a MySQL database askgrade with the following tables
 - ```bash
+  CREATE DATABASE askgrade;
   CREATE TABLE students (roll_no INT PRIMARY KEY,name VARCHAR(100) NOT NULL,email VARCHAR(100),house VARCHAR(10),`class` VARCHAR(50),section VARCHAR(10));
   CREATE TABLE grades (grade_id INT PRIMARY KEY AUTO_INCREMENT, roll_no INT, marks_obtained DECIMAL(5,2), FOREIGN KEY (roll_no) REFERENCES students(roll_no));
   ```
 - Update connection settings in `database.py`
 
-### 5. Run the App
+### 4. Run the App
 
-```bash
-flask run
-```
+- Run ```train_classifier.py``` to train the model
+- Run ```app.py``` to run the application
 
----
-
-## 📌 Roadmap
+##  Roadmap
 
 - Teacher & student login system
 - More advanced NLP understanding
@@ -74,7 +68,7 @@ flask run
 
 ---
 
-## 📜 License
+##  License
 
 This project is licensed. See LICENSE for details.
 
