@@ -9,6 +9,61 @@ let started = false;
 let pendingFormIntent = null;
 let pendingFormFields = [];
 
+// Define dropdown options
+const dropdownOptions = {
+  house: ['daya', 'karunya', 'sathya', 'vidya'],
+  class: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+  section: ['A', 'B', 'C', 'D', 'E', 'F', 'G']
+};
+
+function createFormField(field, form) {
+  const label = document.createElement('label');
+  label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
+  label.style.marginRight = '10px';
+  label.style.display = 'inline-block';
+  label.style.width = '90px';
+
+  let input;
+
+  // Check if field should be a dropdown
+  if (dropdownOptions[field]) {
+    input = document.createElement('select');
+    input.name = field;
+    
+    // Add default option
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.textContent = `Select ${field}`;
+    input.appendChild(defaultOption);
+    
+    // Add options from dropdownOptions
+    dropdownOptions[field].forEach(option => {
+      const optionElement = document.createElement('option');
+      optionElement.value = option;
+      optionElement.textContent = option.charAt(0).toUpperCase() + option.slice(1);
+      input.appendChild(optionElement);
+    });
+  } else {
+    // Create regular input for other fields
+    input = document.createElement('input');
+    input.type = field === 'marks' ? 'number' : 'text';
+    input.name = field;
+  }
+
+  // Common styling for both input types
+  input.required = false;  // All fields optional
+  input.style.marginBottom = '8px';
+  input.style.marginRight = '5px';
+  input.style.padding = '6px 8px';
+  input.style.borderRadius = '5px';
+  input.style.border = '1.2px solid #bbb';
+  input.style.width = 'calc(100% - 110px)';
+
+  form.appendChild(label);
+  form.appendChild(input);
+  form.appendChild(document.createElement('br'));
+}
+
 function createForm(fields, intent) {
   const formDiv = document.createElement('div');
   formDiv.classList.add('message', 'bot');
@@ -17,27 +72,9 @@ function createForm(fields, intent) {
   const form = document.createElement('form');
   form.id = 'action-form';
 
+  // Create fields using the new function
   fields.forEach(field => {
-    const label = document.createElement('label');
-    label.textContent = field.charAt(0).toUpperCase() + field.slice(1) + ': ';
-    label.style.marginRight = '10px';
-    label.style.display = 'inline-block';
-    label.style.width = '90px';
-
-    const input = document.createElement('input');
-    input.name = field;
-    input.type = field === 'marks' ? 'number' : 'text';
-    input.required = false;  // All fields optional
-    input.style.marginBottom = '8px';
-    input.style.marginRight = '5px';
-    input.style.padding = '6px 8px';
-    input.style.borderRadius = '5px';
-    input.style.border = '1.2px solid #bbb';
-    input.style.width = 'calc(100% - 110px)';
-
-    form.appendChild(label);
-    form.appendChild(input);
-    form.appendChild(document.createElement('br'));
+    createFormField(field, form);
   });
 
   const submit = document.createElement('button');

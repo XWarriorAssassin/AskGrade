@@ -207,7 +207,8 @@ body.app{
 }
 
 /* Updated input styling for form inputs inside chat messages */
-.message.bot form input {
+.message.bot form input,
+.message.bot form select {
   background-color: #000000; /* Black background */
   color: var(--text);
   border: 2px solid var(--accent); /* Cyan outline */
@@ -217,13 +218,31 @@ body.app{
   margin-bottom: 8px;
   margin-right: 5px;
   outline: none;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.message.bot form input:focus {
+.message.bot form input:focus,
+.message.bot form select:focus {
   border-color: var(--accent-2);
   box-shadow: 0 0 8px var(--accent-2);
   background-color: #000000;
+}
+
+/* Dropdown specific styling */
+.message.bot form select {
+  cursor: pointer;
+  appearance: none; /* Remove default arrow */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2300c9d9' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 32px; /* Make room for custom arrow */
+}
+
+.message.bot form select option {
+  background-color: #000000;
+  color: var(--text);
+  padding: 8px;
 }
 
 #user-input{

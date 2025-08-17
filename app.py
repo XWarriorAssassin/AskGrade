@@ -24,6 +24,9 @@ def api_query():
     require_form = False
     required_fields = []
     print("Confidence:",int(confidence*100),"%")
+    if confidence<0.2:
+        intent="Unknown"
+    
     if intent == 'add_student':
         response = "Please enter the student's details below."
         require_form = True
@@ -33,6 +36,8 @@ def api_query():
         response = "Please enter the student name and new marks below."
         require_form = True
         required_fields = ['name', 'marks']
+    elif intent=="Unknown":
+        response="Command not recognized."
 
     elif intent == 'display_all':
         data = db_manager.get_all_records()
@@ -295,8 +300,8 @@ def submit_form():
                     # Edge case: Negative marks or unrealistic values
                     if marks_int < 0:
                         return jsonify({'response': 'Marks cannot be negative.'}), 400
-                    if marks_int > 1000:  # Assuming max marks is 1000
-                        return jsonify({'response': 'Marks seem unrealistically high (>1000).'}), 400
+                    if marks_int > 500:  # Assuming max marks is 1000
+                        return jsonify({'response': 'Marks seem unrealistically high (>500).'}), 400
                     marks = marks_int
                 else:
                     marks = None
