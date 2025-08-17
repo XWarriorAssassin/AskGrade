@@ -47,7 +47,7 @@ nltk.download('punkt')
 ### 3. Configure Database
 
 - Create a MySQL database askgrade with the following tables
-- ```bash
+ ```bash
   CREATE DATABASE askgrade;
   CREATE TABLE students (roll_no INT PRIMARY KEY,name VARCHAR(100) NOT NULL,email VARCHAR(100),house VARCHAR(10),`class` VARCHAR(50),section VARCHAR(10));
   CREATE TABLE grades (grade_id INT PRIMARY KEY AUTO_INCREMENT, roll_no INT, marks_obtained DECIMAL(5,2), FOREIGN KEY (roll_no) REFERENCES students(roll_no));
