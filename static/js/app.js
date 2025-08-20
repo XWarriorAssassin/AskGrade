@@ -290,3 +290,99 @@ userInput.addEventListener('keydown', (e) => {
 
 // Focus on load
 window.addEventListener('load', () => userInput.focus());
+
+// Features and their descriptions/images (placeholder images)
+const tutorialFeatures = {
+  'insert a record': {
+    desc: 'Use this to add a new student record. Fill out the form and submit.',
+    example: 'Example: "Insert a record"',
+    img: 'static/img/insert_placeholder.png', // Replace with real image later
+  },
+  'show all records': {
+    desc: 'View all student entries and their details.',
+    example: 'Example: "Show all records"',
+    img: 'static/img/allrecords_placeholder.png',
+  },
+  'update marks': {
+    desc: 'Update the marks for any student.',
+    example: 'Example: "Update marks for John"',
+    img: 'static/img/updatemarks_placeholder.png',
+  },
+  'get student marks': {
+    desc: 'Fetch marks of a specific student.',
+    example: 'Example: "Get marks for Sarah"',
+    img: 'static/img/getmarks_placeholder.png',
+  },
+  'delete a record': {
+    desc: 'Remove a student record from the database.',
+    example: 'Example: "Delete student Priya"',
+    img: 'static/img/delete_placeholder.png'
+  },
+  'class statistics': {
+    desc: 'Get averages, rankings, or fail lists for your class.',
+    example: 'Example: "Show class average", "Show top 3 students"',
+    img: 'static/img/classstats_placeholder.png'
+  },
+  // Add more features if needed!
+};
+
+// Show tutorial button after chat starts
+function showTutorialBtn() {
+  document.getElementById('tutorial-btn').style.display = 'block';
+}
+
+// After your startConversationUIOnce(), add:
+function startConversationUIOnce() {
+  if (started) return;
+  appRoot.classList.add('started');
+  started = true;
+  showTutorialBtn();
+}
+
+// Tutorial modal logic
+const tutorialBtn = document.getElementById('tutorial-btn');
+const tutorialModal = document.getElementById('tutorial-modal');
+const tutorialContent = document.getElementById('tutorial-content');
+
+tutorialBtn.addEventListener('click', showTutorialMain);
+
+function showTutorialMain() {
+  tutorialModal.classList.remove('hidden');
+  tutorialContent.innerHTML = `
+    <button id="close-modal" title="Close">&times;</button>
+    <h2>Welcome to AskGrade!</h2>
+    <p>AskGrade makes managing student records easy and intuitive.<br>
+    You can add, update, delete, and view records with simple messages.<br>
+    Try typing your questions or click a feature below for a quick tutorial!</p>
+    <img src="static/img/mainmenu_placeholder.png" alt="Main menu example"><br>
+    <select id="feature-select">
+      <option value="">-- Select a feature --</option>
+      ${Object.keys(tutorialFeatures).map(f => `<option value="${f}">${f.charAt(0).toUpperCase() + f.slice(1)}</option>`).join('')}
+    </select><br>
+    <button id="show-feature-btn">Show Feature Tutorial</button>
+  `;
+  document.getElementById('close-modal').onclick = hideTutorial;
+  document.getElementById('show-feature-btn').onclick = handleFeatureSelect;
+}
+
+function handleFeatureSelect() {
+  const select = document.getElementById('feature-select');
+  const chosen = select.value;
+  if (!chosen || !tutorialFeatures[chosen]) return;
+  const feature = tutorialFeatures[chosen];
+  tutorialContent.innerHTML = `
+    <button id="close-modal" title="Close">&times;</button>
+    <h2>${chosen.charAt(0).toUpperCase() + chosen.slice(1)}</h2>
+    <p>${feature.desc}</p>
+    <img src="${feature.img}" alt="Feature tutorial image">
+    <p style="margin:18px 0 10px 0"><strong>${feature.example}</strong></p>
+    <button id="back-btn" style="background:#222945;color:#00c9d9; border:none;padding:7px 15px;font-size:16px;border-radius:8px;margin-top:6px">Back to Menu</button>
+  `;
+  document.getElementById('close-modal').onclick = hideTutorial;
+  document.getElementById('back-btn').onclick = showTutorialMain;
+}
+
+function hideTutorial() {
+  tutorialModal.classList.add('hidden');
+}
+

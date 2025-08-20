@@ -244,6 +244,102 @@ body.app{
   color: var(--text);
   padding: 8px;
 }
+#tutorial-btn {
+  position: fixed;
+  top: 18px;
+  right: 32px;
+  z-index: 110;
+  background: #14161a;
+  color: #00c9d9;
+  border: none;
+  font-size: 28px;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(0,0,0,.24);
+  display: none;
+  transition: background .2s, color .2s;
+}
+#tutorial-btn:hover {
+  background: #21222a;
+  color: #62e1eb;
+}
+#tutorial-modal {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(30,32,35,0.80);
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#tutorial-modal.hidden { display: none; }
+.modal-content {
+  background: #101216;
+  color: #e6e9ef;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.46);
+  text-align: center;
+  position: relative;
+  width: auto;
+  min-width: 320px;
+  max-width: 98vw;
+  /* Remove fixed width constraints to allow natural expansion */
+  display: inline-block;
+  max-width: 98vw;
+  max-height: 94vh;
+  overflow-y: auto;
+}
+
+.modal-content img {
+  display: block;
+  margin: 24px auto 18px auto;
+  width: 100%;
+  max-width: 720px;    /* allow much larger images */
+  min-width: 230px;
+  height: auto;
+  border-radius: 16px;
+  background: #1c1c22;
+  object-fit: contain;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.22);
+}
+
+
+#close-modal {
+  position: absolute;
+  top: 18px;
+  right: 28px;
+  background: transparent;
+  color: #c9c9c9;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+}
+#feature-select {
+  width: 80%;
+  padding: 7px 12px;
+  background: #181b20;
+  color: #dedede;
+  border: 2px solid #00c9d9;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-top: 24px;
+  margin-bottom: 14px;
+}
+#show-feature-btn {
+  background: #00c9d9;
+  color: #191e24;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background .2s;
+  margin-bottom: 8px;
+}
+#show-feature-btn:hover { background: #0eb3c2; }
 
 #user-input{
   flex:1;

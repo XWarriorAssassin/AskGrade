@@ -1,12 +1,12 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
 import nltk
 from nltk.corpus import stopwords
 
 class TeacherIntentClassifier:
     def __init__(self):
         self.vectorizer = TfidfVectorizer(stop_words=stopwords.words('english'))
-        self.classifier = MultinomialNB()
+        self.classifier = LogisticRegression(max_iter=5000)
         self.trained = False
 
     def train(self, x_train, y_train):
