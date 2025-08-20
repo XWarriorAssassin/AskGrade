@@ -2,15 +2,42 @@ import pickle
 from flask import Flask, render_template, request, jsonify
 from models.database import DatabaseManager
 import os
+import sys
 import random
 
-app = Flask(__name__)
+def get_resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    
+    return os.path.join(base_path, relative_path)
+
+app = Flask(__name__, 
+           template_folder=get_resource_path('templates'),
+           static_folder=get_resource_path('static'))
+
 db_manager = DatabaseManager()
 
-# Load the trained model at startup
-model_path = os.path.join(os.path.dirname(__file__), 'data', 'model.pkl')
-with open(model_path, 'rb') as f:
-    intent_classifier = pickle.load(f)
+# Load the trained model at startup with proper error handling
+model_path = get_resource_path(os.path.join('data', 'model.pkl'))
+
+try:
+    with open(model_path, 'rb') as f:
+        intent_classifier = pickle.load(f)
+    print(f"Model loaded successfully from: {model_path}")
+except FileNotFoundError:
+    print(f"Model file not found at: {model_path}")
+    print("Current directory:", os.getcwd())
+    print("Available files in base:", os.listdir(get_resource_path('.')))
+    if os.path.exists(get_resource_path('data')):
+        print("Files in data folder:", os.listdir(get_resource_path('data')))
+    sys.exit(1)
+except Exception as e:
+    print(f"Error loading model: {e}")
+    sys.exit(1)
 
 @app.route('/')
 def index():
@@ -64,64 +91,64 @@ def api_query():
         else:
             response = "No records to display."
     elif intent=="introduce":
-        response="""Hello! I’m AskGrade, your intelligent assistant for managing student records quickly and easily. I can help you by:\n
+        response="""Hello! I'm AskGrade, your intelligent assistant for managing student records quickly and easily. I can help you by:\n
           Adding new student details, update or delete records, fetch marks for any student, and provide class statistics like averages and top 3 rankings.\n
           Just ask me to show all students, get top performers, or any data you need in the way you want.\n 
-          I’m here to simplify your student database management and make your work smoother.\n
+          I'm here to simplify your student database management and make your work smoother.\n
           How can I assist you today?"""    
     elif intent=="compliment":
         
         responses = [
-        "You’re welcome",
+        "You're welcome",
         "Anytime",
         "No problem",
         "Always welcome",
         "Sure, happy to help",
         "No worries at all",
-        "That’s okay, don’t mention it",
+        "That's okay, don't mention it",
         "Glad I could help you",
         "Of course, no issue",
-        "It’s fine, anytime you ask",
+        "It's fine, anytime you ask",
         "You got it",
         "Okay, done",
-        "That’s good, I’m happy it worked",
+        "That's good, I'm happy it worked",
         "No issue, always here for you",
         "Sure thing",
         "Happy to do that for you",
-        "It’s nothing, really",
-        "That’s alright, my pleasure",
+        "It's nothing, really",
+        "That's alright, my pleasure",
         "Okay, glad to help",
-        "I’m here if you need more help",
-        "Don’t worry, it was simple",
-        "It’s fine, not a big deal",
+        "I'm here if you need more help",
+        "Don't worry, it was simple",
+        "It's fine, not a big deal",
         "Okay, I liked helping you",
-        "That’s okay, I enjoy helping",
+        "That's okay, I enjoy helping",
         "Sure, it was easy",
-        "Alright, glad it’s useful",
+        "Alright, glad it's useful",
         "No trouble at all",
         "Okay, anytime you want",
-        "You’re most welcome",
+        "You're most welcome",
         "Fine, always happy to support",
-        "That’s okay, good to know it helped",
-        "No stress, I’m here for you",
-        "It’s good, I like helping others",
+        "That's okay, good to know it helped",
+        "No stress, I'm here for you",
+        "It's good, I like helping others",
         "Okay, nothing hard in that",
         "No worries, that was quick",
         "Always glad to see you happy",
         "Sure, anything for you",
         "Okay, no problem at all",
-        "I’m happy it worked out for you",
+        "I'm happy it worked out for you",
         "Alright, you can always ask me",
-        "It’s fine, I don’t mind helping",
+        "It's fine, I don't mind helping",
         "Of course, happy to do it",
-        "No issue, hope it’s clear now",
-        "Okay, that’s nothing big",
+        "No issue, hope it's clear now",
+        "Okay, that's nothing big",
         "Happy that it made things easier",
-        "Don’t mention it, I like doing this",
-        "It’s okay, I enjoy these small helps",
-        "Sure, I’m glad it helped you understand",
+        "Don't mention it, I like doing this",
+        "It's okay, I enjoy these small helps",
+        "Sure, I'm glad it helped you understand",
         "Always nice to help people like you",
-        "Okay, I’ll always try to help whenever you need"
+        "Okay, I'll always try to help whenever you need"
     ]
         response=random.choice(responses)
 
@@ -130,51 +157,51 @@ def api_query():
         "Hi there",
         "Hey",
         "Good to see you",
-        "Hope you’re having a good day",
+        "Hope you're having a good day",
         "Wishing you a great day",
         "Hi, how are you?",
         "Hello, nice to meet you",
-        "Hey, glad you’re here",
+        "Hey, glad you're here",
         "Good morning",
         "Good afternoon",
         "Good evening",
-        "Hope everything’s going well",
-        "Hi, hope you’re doing fine",
-        "Hello, how’s your day going?",
-        "Hey, it’s nice to see you",
+        "Hope everything's going well",
+        "Hi, hope you're doing fine",
+        "Hello, how's your day going?",
+        "Hey, it's nice to see you",
         "Wishing you a wonderful day ahead",
         "Hi there, hope all is well",
         "Good to have you here",
         "Hope you have a fantastic day",
-        "Hello, I’m happy to talk with you",
+        "Hello, I'm happy to talk with you",
         "Hi, wishing you a pleasant day",
-        "Hey, how’s everything?",
-        "Hope you’re having a nice time",
+        "Hey, how's everything?",
+        "Hope you're having a nice time",
         "Good to see you again",
-        "Hello, hope today’s treating you well",
-        "Hi, I hope you’re in good spirits",
+        "Hello, hope today's treating you well",
+        "Hi, I hope you're in good spirits",
         "Hey, hope things are going smoothly",
         "Good morning, hope you feel fresh today",
         "Good afternoon, wishing you a productive day",
         "Good evening, hope you had a nice day",
-        "Hi there, it’s nice to connect with you",
-        "Hello, I hope everything’s going great for you",
-        "Hey, hope your day’s been good so far",
+        "Hi there, it's nice to connect with you",
+        "Hello, I hope everything's going great for you",
+        "Hey, hope your day's been good so far",
         "Wishing you peace and happiness today",
         "Hi, glad to catch up with you",
-        "Hope you’re having a cheerful day",
+        "Hope you're having a cheerful day",
         "Hello, hope your day is full of positivity",
         "Good to see you smiling",
-        "Hey, hope you’re enjoying yourself",
+        "Hey, hope you're enjoying yourself",
         "Hi, wishing you joy and success today",
         "Hope today brings you lots of good things",
         "Hello, may your day be bright and happy",
-        "Hey, hope you’re feeling good today",
+        "Hey, hope you're feeling good today",
         "Good morning, hope you slept well",
-        "Good evening, hope you’re relaxing now",
+        "Good evening, hope you're relaxing now",
         "Hi, hope your plans are going well",
         "Hello, always glad to greet you",
-        "Hope you’re having a wonderful time"]
+        "Hope you're having a wonderful time"]
         response=random.choice(responses)
      
 
@@ -225,7 +252,7 @@ def api_query():
     })
 @app.route('/api/student_names', methods=['GET'])
 def get_student_names():
-    data = db_manager.get_all_student_names()  # You’ll add this DB method
+    data = db_manager.get_all_student_names()  # You'll add this DB method
     names = [d['name'] for d in data]
     return jsonify({"names": names})
 
